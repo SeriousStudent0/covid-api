@@ -1,0 +1,10 @@
+spring:
+  liquibase:
+    enabled: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/covid-db
+    username: postgres
+    password: PassWord
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
