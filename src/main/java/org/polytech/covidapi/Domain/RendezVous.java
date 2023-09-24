@@ -15,7 +15,6 @@ public class RendezVous {
     @Column(nullable = false)
     private Date date;
 
-    @Column(nullable = false)
     @ManyToOne
     private Doctor doctor;
 

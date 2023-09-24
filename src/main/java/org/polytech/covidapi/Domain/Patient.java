@@ -20,7 +20,6 @@ public class Patient {
         nullable = true)
     private Address patientAddress;
 
-    @Column(nullable = false)
     @ManyToOne
     private Doctor doctor;
 

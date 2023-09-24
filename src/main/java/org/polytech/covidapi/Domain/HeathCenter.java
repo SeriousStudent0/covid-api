@@ -21,7 +21,7 @@ public class HeathCenter {
         nullable = true)
     private Address centerAddress;
 
-    @OneToMany(mappedBy = "healthcenter")
+    @OneToMany(mappedBy = "healthcenters")
     private List<Doctor> doctors;
 
 }

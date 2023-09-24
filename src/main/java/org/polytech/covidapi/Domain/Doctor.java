@@ -15,7 +15,6 @@ public class Doctor {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
     @ManyToOne
     private HeathCenter healthcenters;
 
