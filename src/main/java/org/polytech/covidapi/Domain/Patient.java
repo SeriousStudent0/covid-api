@@ -6,10 +6,24 @@ import javax.persistence.*;
 @Table(name="t_patient")
 public class Patient {
  
-     @Id
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int idPatient;
 
     private String name;
-    private Address address;
     private boolean vaccinated;
+
+    @OneToOne
+    @JoinColumn(
+        name = "idAddress",
+        foreignKey = @ForeignKey(name = "addressFK"),
+        nullable = true)
+    private Address patientAddress;
+
+    @Column(nullable = false)
+    @ManyToOne
+    private Doctor doctor;
+
+    @OneToOne(mappedBy = "patient")
+    private RendezVous rdv;
 }

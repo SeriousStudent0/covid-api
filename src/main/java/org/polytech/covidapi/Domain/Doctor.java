@@ -1,5 +1,7 @@
 package org.polytech.covidapi.Domain;
 
+import java.util.List;
+
 import javax.persistence.*;
 
 @Entity
@@ -7,7 +9,26 @@ import javax.persistence.*;
 public class Doctor {
     
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int idDoctor;
 
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
+    @ManyToOne
+    private HeathCenter healthcenters;
+
+    @OneToMany(mappedBy = "doctor")
+    private List<Patient> patients;
+
+    @OneToOne
+    @JoinColumn(
+        name = "idAddress",
+        foreignKey = @ForeignKey(name = "addressFK"),
+        nullable = true)
+    private Address doctorAddress;
+
+    @OneToMany(mappedBy = "doctor")
+    private List<RendezVous> rdv;
 }
