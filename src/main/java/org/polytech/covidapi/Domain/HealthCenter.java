@@ -6,11 +6,11 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="t_health_center")
-public class HeathCenter {
+public class HealthCenter {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idCenter;
+    private Integer idCenter;
 
     private String name;
 
@@ -24,4 +24,19 @@ public class HeathCenter {
     @OneToMany(mappedBy = "healthcenters")
     private List<Doctor> doctors;
 
+    public String getName(){
+        return name;
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public Address getAddress(){
+        return centerAddress;
+    }
+
+    public void setAddress(Address address){
+        this.centerAddress = address;
+    }
 }
