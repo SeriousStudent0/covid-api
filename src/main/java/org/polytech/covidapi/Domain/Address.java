@@ -14,7 +14,7 @@ public class Address {
     private String country;
     private String city;
     private String street;
-    private double streetNumber;
+    private Integer streetNumber;
 
 
 
@@ -46,7 +46,7 @@ public class Address {
         this.street = street;
     }
 
-    public double getStreetNumber(){
+    public Integer getStreetNumber(){
         return streetNumber;
     }
 

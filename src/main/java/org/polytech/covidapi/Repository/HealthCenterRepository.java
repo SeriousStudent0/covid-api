@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface HealthCenterRepository extends JpaRepository<HealthCenter, Integer>{
 
-    //List<HealthCenter> findAll();
+    List<HealthCenter> findAll();
 }
