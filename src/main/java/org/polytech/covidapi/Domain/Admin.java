@@ -10,6 +10,7 @@ public class Admin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_admin")
     private Integer idAdmin;
 
     @Column(nullable = false)

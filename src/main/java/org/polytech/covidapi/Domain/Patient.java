@@ -1,7 +1,6 @@
 package org.polytech.covidapi.Domain;
 
 import javax.persistence.*;
-import javax.print.Doc;
 
 @Entity
 @Table(name="t_patient")
@@ -9,6 +8,7 @@ public class Patient {
  
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_patient")
     private Integer idPatient;
 
     private String name;
@@ -22,6 +22,7 @@ public class Patient {
     private Address patientAddress;
 
     @ManyToOne
+    @JoinColumn(name = "idDoctor")
     private Doctor doctor;
 
     @OneToOne(mappedBy = "patient")

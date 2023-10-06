@@ -10,6 +10,7 @@ public class Doctor {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_doctor")
     private Integer idDoctor;
 
     @Column(nullable = false)
@@ -19,7 +20,7 @@ public class Doctor {
     @JoinColumn(name = "idCenter")
     private HealthCenter healthcenter;
 
-    @OneToMany(mappedBy = "idDoctor")
+    @OneToMany(mappedBy = "doctor")
     private List<Patient> patients;
 
     @OneToOne

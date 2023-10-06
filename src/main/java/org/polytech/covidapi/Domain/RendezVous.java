@@ -10,6 +10,7 @@ public class RendezVous {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_rendez_vous")
     private Integer idRDV;
 
     @Column(nullable = false)

@@ -8,6 +8,7 @@ public class Address {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_address")
     private Integer idAddress;
 
     private String country;

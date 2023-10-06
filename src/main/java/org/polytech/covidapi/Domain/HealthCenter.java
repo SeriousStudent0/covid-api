@@ -10,6 +10,7 @@ public class HealthCenter {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_healthcenter")
     private Integer idCenter;
 
     private String name;
@@ -21,7 +22,7 @@ public class HealthCenter {
         nullable = true)
     private Address centerAddress;
 
-    @OneToMany(mappedBy = "healthcenters")
+    @OneToMany(mappedBy = "healthcenter")
     private List<Doctor> doctors;
 
     public String getName(){

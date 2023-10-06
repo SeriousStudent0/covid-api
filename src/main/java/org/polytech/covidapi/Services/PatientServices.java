@@ -17,10 +17,10 @@ public class PatientServices {
     }
 
     public List<Patient> getAllPatientByName(String name){
-        return patientRepository.findByNameContaining(name);
+        return patientRepository.findAllByNameContaining(name);
     } 
 
     public List<Patient> getPatientsByDoctorId(Integer doctorId){
-        return patientRepository.findByDoctorIdDoctor(doctorId);
+        return patientRepository.findAllByDoctorIdDoctor(doctorId);
     } 
 }

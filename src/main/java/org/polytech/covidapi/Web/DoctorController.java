@@ -29,7 +29,7 @@ public class DoctorController {
         this.patientService = patientService;
     }
 
-    @PostMapping
+    @PostMapping(path = "/create")
     public ResponseEntity<Doctor> createDoctor(@RequestBody Doctor doctor){
         Doctor createdDoctor = doctorService.createDoctor(doctor);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdDoctor);
@@ -41,7 +41,7 @@ public class DoctorController {
         return ResponseEntity.ok(patients);
     }
 
-    @GetMapping(path = "/{doctorId}/patients")
+    @GetMapping(path = "/{doctorId}/patients/search")
     public List<Patient> getAllPatientByName(
         @RequestParam(name = "name", required = true) String name){
             return patientService.getAllPatientByName(name);

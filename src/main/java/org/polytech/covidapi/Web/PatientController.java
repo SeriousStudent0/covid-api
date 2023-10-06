@@ -21,7 +21,7 @@ public class PatientController {
 
     @GetMapping(path = "/patient/{doctorId}/patients")
     public List<Patient> getAllPatientForDoctorList(@PathVariable Integer doctorId){
-        return patientService.getAllPatientForDoctorList(doctorId);
+        return patientService.getPatientsByDoctorId(doctorId);
     }
 
 }

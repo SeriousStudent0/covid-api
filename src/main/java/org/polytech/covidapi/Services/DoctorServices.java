@@ -35,7 +35,7 @@ public class DoctorServices {
     }
 
     public List<Doctor> getDoctorsByHealthCenterId(Integer healtCenterId){
-        return doctorRepository.findAllByHealthCenterId(healtCenterId);
+        return doctorRepository.findAllByHealthcenterIdCenter(healtCenterId);
     }
 
 
