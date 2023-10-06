@@ -50,6 +50,10 @@ public class RendezVous {
     public void setPatient(Patient patient){
         this.patient = patient;
     }
+
+    public void test(){
+        
+    }
 }
  
      
