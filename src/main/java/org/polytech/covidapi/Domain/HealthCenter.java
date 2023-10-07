@@ -40,4 +40,19 @@ public class HealthCenter {
     public void setAddress(Address address){
         this.centerAddress = address;
     }
+
+    public List<Doctor> getDoctorList(){
+        return doctors;
+    }
+
+    public void addDoctor(Doctor doctor){
+        if(doctor != null){
+            doctors.add(doctor);
+            doctor.setHealthCenter(this);
+        }
+    }
+
+    public void removeDoctorById(Integer doctorId){
+        doctors.removeIf(doctor -> doctor.getId().equals(doctorId));
+    }
 }

@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 public interface HealthCenterRepository extends JpaRepository<HealthCenter, Integer>{
 
     List<HealthCenter> findAll();
+    HealthCenter findByIdCenter(Integer id);
 }
