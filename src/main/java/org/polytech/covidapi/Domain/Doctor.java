@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import org.polytech.covidapi.enums.UserRole;
+
 @Entity
 @Table(name="t_doctor")
 public class Doctor {
@@ -15,6 +17,19 @@ public class Doctor {
 
     @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
+    private String login;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
+    private Boolean isLogged = false;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private UserRole role;
 
     @ManyToOne
     @JoinColumn(name = "idCenter")
@@ -38,12 +53,44 @@ public class Doctor {
         return idDoctor;
     }
 
+    public String getLogin(){
+        return login;
+    }
+
+    public void setLogin(String login){
+        this.login = login;
+    }
+
+    public String getPassword(){
+        return password;
+    }
+
+    public void setPassword(String password){
+        this.password = password;
+    }
+
+    public Boolean getLog(){
+        return isLogged;
+    }
+
+    public void setLog(Boolean logStatus){
+        this.isLogged = logStatus;
+    }
+
     public String getName(){
         return name;
     }
 
     public void setName(String name){
         this.name = name;
+    }
+
+    public UserRole getRole(){
+        return role;
+    }
+
+    public void setRole(UserRole role){
+        this.role = role;
     }
 
     public Address getAddress(){

@@ -1,11 +1,13 @@
 package org.polytech.covidapi.Services;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
 import org.polytech.covidapi.Domain.Doctor;
 import org.polytech.covidapi.Repository.DoctorRepository;
+import org.polytech.covidapi.enums.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +40,26 @@ public class DoctorServices {
         return doctorRepository.findAllByHealthcenterIdCenter(healtCenterId);
     }
 
+    public Integer authenticate(String login, String password){
+        Optional<Doctor> optionalDoctor = doctorRepository.findByLogin(login);
+        
+        if (optionalDoctor.isPresent()) {
+            Doctor doctor = optionalDoctor.get();
+            
+            if (passwordMatches(password, doctor.getPassword()) && doctor.getRole() != UserRole.USER) {
+                doctor.setLog(true);
+                doctor = doctorRepository.save(doctor);
+                return doctor.getId();
+            }
+        }
 
+        return null;
+    }
+
+    private boolean passwordMatches(String rawPassword, String hashedPassword) {
+        // Password hashing logic here
+        // hashing library (BCrypt)
+        return rawPassword.equals(hashedPassword);
+    }
     
 }
