@@ -66,4 +66,14 @@ public class DoctorController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
+
+    @GetMapping()
+    public ResponseEntity<Doctor> getUser(@RequestParam(name = "id", required = true) Integer id) {
+        Doctor doctor = doctorService.getDoctor(id);
+        if (doctor != null) {
+            return ResponseEntity.ok(doctor);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

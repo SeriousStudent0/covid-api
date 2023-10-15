@@ -13,7 +13,8 @@ public class HealthCenterServices {
     private final HealthCenterRepository healthCenterRepository;
 
     @Autowired
-    public HealthCenterServices(HealthCenterRepository healthCenterRepository){
+    public HealthCenterServices(
+        HealthCenterRepository healthCenterRepository){
         this.healthCenterRepository = healthCenterRepository;
     }
 

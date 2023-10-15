@@ -15,6 +15,7 @@ public class Address {
     private String city;
     private String street;
     private Integer streetNumber;
+    private Integer postalCode;
 
 
 
@@ -52,5 +53,13 @@ public class Address {
 
     public void setStreetNumber(Integer streetNumber) {
         this.streetNumber = streetNumber;
+    }
+
+    public Integer getPostalCode(){
+        return postalCode;
+    }
+
+    public void setPostalCode(Integer postalCode) {
+        this.postalCode = postalCode;
     }
 }

@@ -25,6 +25,13 @@ public class DoctorServices {
         return doctorRepository.save(doctor);
     }
 
+    public Doctor getDoctor(Integer doctorId){
+        Doctor doctor = doctorRepository.findById(doctorId)
+            .orElseThrow(() -> new EntityNotFoundException("Doctor Not Found"));
+        
+        return doctor;
+    }
+
     public Doctor updateDoctor(Integer doctorId, Doctor updatedDoctor){
         Doctor existingDoctor = doctorRepository.findById(doctorId)
             .orElseThrow(() -> new EntityNotFoundException("Doctor Not Found"));
