@@ -68,5 +68,17 @@ public class DoctorServices {
         // hashing library (BCrypt)
         return rawPassword.equals(hashedPassword);
     }
+
+    public boolean loggout(Integer id){
+        Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
+        
+        if (optionalDoctor.isPresent()) {
+            Doctor doctor = optionalDoctor.get();
+            doctor.setLog(false);
+            doctor = doctorRepository.save(doctor);
+            return true;
+        }
+        return false;
+    }
     
 }

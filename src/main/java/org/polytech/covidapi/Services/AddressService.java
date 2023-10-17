@@ -1,5 +1,7 @@
 package org.polytech.covidapi.Services;
 
+import java.util.Optional;
+
 import javax.persistence.EntityNotFoundException;
 
 import org.polytech.covidapi.Domain.Address;
@@ -30,5 +32,9 @@ public class AddressService {
         existingAddress.setStreetNumber(updatedAddress.getStreetNumber());
 
         return addressRepository.save(existingAddress);
+    }
+
+    public Optional<Address> getById(Integer addressId){
+        return addressRepository.findById(addressId);
     }
 }

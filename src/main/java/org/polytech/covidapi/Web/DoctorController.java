@@ -14,12 +14,11 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import liquibase.pro.packaged.lo;
 
 @RestController
 @CrossOrigin
@@ -64,6 +63,19 @@ public class DoctorController {
             return ResponseEntity.status(HttpStatus.OK).body(userId);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+    @PutMapping(path = "/logging")
+    public ResponseEntity<Boolean> loggout(@RequestBody Integer userId) {
+        boolean logResult = doctorService.loggout(userId);
+        
+        if (logResult) {
+            // Successfully logged out
+            return ResponseEntity.ok(true);
+        } else {
+            // Doctor not found
+            return ResponseEntity.notFound().build();
         }
     }
 
