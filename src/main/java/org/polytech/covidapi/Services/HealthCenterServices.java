@@ -2,8 +2,11 @@ package org.polytech.covidapi.Services;
 
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.polytech.covidapi.Domain.Doctor;
 import org.polytech.covidapi.Domain.HealthCenter;
+import org.polytech.covidapi.Repository.AddressRepository;
 import org.polytech.covidapi.Repository.HealthCenterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,12 +17,23 @@ public class HealthCenterServices {
 
     @Autowired
     public HealthCenterServices(
-        HealthCenterRepository healthCenterRepository){
+        HealthCenterRepository healthCenterRepository,
+        AddressRepository addressRepository){
         this.healthCenterRepository = healthCenterRepository;
     }
 
     public HealthCenter createHealthCenter(HealthCenter healthCenter){
         return healthCenterRepository.save(healthCenter);
+    }
+
+    public HealthCenter updateHealthCenter(HealthCenter healthCenter){
+        HealthCenter existingCenter = healthCenterRepository.findById(healthCenter.getId())
+            .orElseThrow(() -> new EntityNotFoundException("HealthCenter Not Found"));
+
+        existingCenter.setName(healthCenter.getName());
+
+        existingCenter.setAddress(healthCenter.getAddress());
+        return healthCenterRepository.save(existingCenter);
     }
 
     public List<HealthCenter> getAll(){

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,6 +57,22 @@ public class HealthCenterController {
 
         HealthCenter createdHealthCenter = healthcenterService.createHealthCenter(healthCenter);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdHealthCenter);
+    }
+
+    @PutMapping(path = "/create")
+    public ResponseEntity<HealthCenter> updateHealthCenter(@RequestBody HealthCenter healthCenter){
+
+        if (healthCenter == null) {
+            // Handle the case where the required parameters are missing
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        HealthCenter updatedCenter = healthcenterService.updateHealthCenter(healthCenter);
+        if (updatedCenter != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(updatedCenter);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @GetMapping

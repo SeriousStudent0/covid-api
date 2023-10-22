@@ -39,6 +39,16 @@ public class DoctorController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdDoctor);
     }
 
+    @PutMapping(path = "/create")
+    public ResponseEntity<Doctor> modifyDoctor(@RequestBody Doctor doctor){
+        Doctor modifiedDoctor = doctorService.updateDoctor(doctor.getId(), doctor);
+        if (modifiedDoctor != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(modifiedDoctor);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
     @GetMapping(path = "/{doctorId}/patients")
     public ResponseEntity<List<Patient>> getPatientsForDoctorId(@PathVariable Integer doctorId){
         List<Patient> patients = patientService.getPatientsByDoctorId(doctorId);

@@ -1,9 +1,11 @@
 package org.polytech.covidapi.Services;
 
+import java.io.Console;
 import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
+import javax.print.Doc;
 
 import org.polytech.covidapi.Domain.Doctor;
 import org.polytech.covidapi.Repository.DoctorRepository;
@@ -19,6 +21,22 @@ public class DoctorServices {
     @Autowired
     public DoctorServices(DoctorRepository doctorRepository){
         this.doctorRepository = doctorRepository;
+    }
+
+    public void createSuperAdminIfNotExists() {
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA2");
+        // Check if a SUPER_ADMIN user already exists
+        Optional<Doctor> existingSuperAdmin = doctorRepository.findByRole(UserRole.SUPER_ADMIN);
+
+        if (!existingSuperAdmin.isPresent()) {
+            // Create a new SUPER_ADMIN user
+            Doctor superAdmin = new Doctor();
+            superAdmin.setName("administrator");
+            superAdmin.setLogin("admin");
+            superAdmin.setPassword("password"); // should be securely hashed
+            superAdmin.setRole(UserRole.SUPER_ADMIN);
+            doctorRepository.save(superAdmin);
+        }
     }
 
     public Doctor createDoctor(Doctor doctor){
@@ -80,5 +98,4 @@ public class DoctorServices {
         }
         return false;
     }
-    
 }

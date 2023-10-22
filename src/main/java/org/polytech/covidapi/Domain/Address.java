@@ -2,6 +2,8 @@ package org.polytech.covidapi.Domain;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name="t_address")
 public class Address {
@@ -9,6 +11,7 @@ public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_address")
+    @JsonProperty("id")
     private Integer idAddress;
 
     private String country;

@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name="t_health_center")
 public class HealthCenter {
@@ -11,6 +13,7 @@ public class HealthCenter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_healthcenter")
+    @JsonProperty("id")
     private Integer idCenter;
 
     private String name;
@@ -20,10 +23,19 @@ public class HealthCenter {
         name = "idAddress",
         foreignKey = @ForeignKey(name = "addressFK"),
         nullable = true)
-    private Address centerAddress;
+    private Address address;
 
     @OneToMany(mappedBy = "healthcenter")
+    @JsonProperty("doctorList")
     private List<Doctor> doctors;
+
+    public Integer getId() {
+        return idCenter;
+    }
+
+    public void setId(Integer id){
+        this.idCenter = id;
+    }
 
     public String getName(){
         return name;
@@ -34,11 +46,11 @@ public class HealthCenter {
     }
 
     public Address getAddress(){
-        return centerAddress;
+        return address;
     }
 
     public void setAddress(Address address){
-        this.centerAddress = address;
+        this.address = address;
     }
 
     public List<Doctor> getDoctorList(){
