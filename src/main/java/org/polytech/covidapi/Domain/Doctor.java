@@ -6,6 +6,8 @@ import javax.persistence.*;
 
 import org.polytech.covidapi.enums.UserRole;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name="t_doctor")
 public class Doctor {
@@ -33,6 +35,7 @@ public class Doctor {
 
     @ManyToOne
     @JoinColumn(name = "idCenter")
+    @JsonProperty("healthcenter")
     private HealthCenter healthcenter;
 
     @OneToMany(mappedBy = "doctor")

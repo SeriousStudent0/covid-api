@@ -8,7 +8,9 @@ import javax.persistence.EntityNotFoundException;
 import javax.print.Doc;
 
 import org.polytech.covidapi.Domain.Doctor;
+import org.polytech.covidapi.Domain.HealthCenter;
 import org.polytech.covidapi.Repository.DoctorRepository;
+import org.polytech.covidapi.Repository.HealthCenterRepository;
 import org.polytech.covidapi.enums.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +19,12 @@ import org.springframework.stereotype.Service;
 public class DoctorServices {
 
     private final DoctorRepository doctorRepository;
+    private final HealthCenterRepository healthCenterRepository;
 
     @Autowired
-    public DoctorServices(DoctorRepository doctorRepository){
+    public DoctorServices(DoctorRepository doctorRepository, HealthCenterRepository healthCenterRepository){
         this.doctorRepository = doctorRepository;
+        this.healthCenterRepository = healthCenterRepository;
     }
 
     public void createSuperAdminIfNotExists() {
@@ -40,6 +44,10 @@ public class DoctorServices {
     }
 
     public Doctor createDoctor(Doctor doctor){
+        HealthCenter healthCenter = doctor.getHealthCenter();
+        System.out.println(healthCenter);
+        healthCenter.addDoctor(doctor);
+        healthCenterRepository.save(healthCenter);
         return doctorRepository.save(doctor);
     }
 
