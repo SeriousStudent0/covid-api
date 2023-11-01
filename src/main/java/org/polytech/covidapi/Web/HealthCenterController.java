@@ -1,7 +1,11 @@
 package org.polytech.covidapi.Web;
 
+import java.io.Console;
+import java.io.Serial;
 import java.util.List;
 import java.util.Map;
+
+import javax.sql.rowset.serial.SerialArray;
 
 import org.polytech.covidapi.Domain.Address;
 import org.polytech.covidapi.Domain.Doctor;
@@ -34,19 +38,14 @@ public class HealthCenterController {
     }
     
     @PostMapping(path = "/create")
-    public ResponseEntity<HealthCenter> createHealthCenter(@RequestBody Map<String, Object> request){
-        String centerName = (String) request.get("centerName");
-        Integer addressId = (Integer) request.get("addressId");
+    public ResponseEntity<HealthCenter> createHealthCenter(@RequestBody HealthCenter healthCenter){
 
-        if (centerName == null || addressId == null) {
+        if (healthCenter.getName() == null || healthCenter.getAddress().getId() == null) {
             // Handle the case where the required parameters are missing
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
-        HealthCenter healthCenter = new HealthCenter();
-        healthCenter.setName(centerName);
-
-        Address address = addressService.getById(addressId).orElse(null);
+        Address address = addressService.getById(healthCenter.getAddress().getId()).orElse(null);
 
         if (address == null) {
             // Handle the case where the provided addressId is invalid or not found

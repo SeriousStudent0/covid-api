@@ -1,9 +1,11 @@
 package org.polytech.covidapi.Domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
@@ -26,8 +28,10 @@ public class HealthCenter {
     private Address address;
 
     @OneToMany(mappedBy = "healthcenter")
-    @JsonProperty("doctorList")
-    private List<Doctor> doctors;
+    //@OneToMany(mappedBy = "healthcenter", fetch = FetchType.LAZY)
+    //@JsonProperty("doctorList")
+    //@JsonIgnore
+    private List<Doctor> doctorList = new ArrayList<>();
 
     public Integer getId() {
         return idCenter;
@@ -54,17 +58,17 @@ public class HealthCenter {
     }
 
     public List<Doctor> getDoctorList(){
-        return doctors;
+        return doctorList;
     }
 
     public void addDoctor(Doctor doctor){
-        if(doctor != null){
-            doctors.add(doctor);
-            doctor.setHealthCenter(this);
-        }
+        System.out.println("Hello, World!");
+        //if(doctor != null){
+        //    doctorList.add(doctor);
+        //}
     }
 
     public void removeDoctorById(Integer doctorId){
-        doctors.removeIf(doctor -> doctor.getId().equals(doctorId));
+        doctorList.removeIf(doctor -> doctor.getId().equals(doctorId));
     }
 }

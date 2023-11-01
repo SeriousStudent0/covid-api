@@ -1,11 +1,13 @@
 package org.polytech.covidapi.Domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
 
 import org.polytech.covidapi.enums.UserRole;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
@@ -34,12 +36,14 @@ public class Doctor {
     private UserRole role;
 
     @ManyToOne
-    @JoinColumn(name = "idCenter")
-    @JsonProperty("healthcenter")
+    //@JoinColumn(name = "idCenter")
+    //@JsonProperty("healthcenter")
+    //@JsonIgnore
     private HealthCenter healthcenter;
 
     @OneToMany(mappedBy = "doctor")
-    private List<Patient> patients;
+    @JsonIgnore
+    private List<Patient> patients = new ArrayList<>();
 
     @OneToOne
     @JoinColumn(
@@ -49,7 +53,8 @@ public class Doctor {
     private Address doctorAddress;
 
     @OneToMany(mappedBy = "doctor")
-    private List<RendezVous> rdv;
+    @JsonIgnore
+    private List<RendezVous> rdv = new ArrayList<>();
 
 
     public Integer getId(){

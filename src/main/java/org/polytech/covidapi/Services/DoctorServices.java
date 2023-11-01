@@ -7,8 +7,10 @@ import java.util.Optional;
 import javax.persistence.EntityNotFoundException;
 import javax.print.Doc;
 
+import org.polytech.covidapi.Domain.Address;
 import org.polytech.covidapi.Domain.Doctor;
 import org.polytech.covidapi.Domain.HealthCenter;
+import org.polytech.covidapi.Repository.AddressRepository;
 import org.polytech.covidapi.Repository.DoctorRepository;
 import org.polytech.covidapi.Repository.HealthCenterRepository;
 import org.polytech.covidapi.enums.UserRole;
@@ -20,15 +22,16 @@ public class DoctorServices {
 
     private final DoctorRepository doctorRepository;
     private final HealthCenterRepository healthCenterRepository;
+    private final AddressRepository addressRepository;
 
     @Autowired
-    public DoctorServices(DoctorRepository doctorRepository, HealthCenterRepository healthCenterRepository){
+    public DoctorServices(DoctorRepository doctorRepository, HealthCenterRepository healthCenterRepository, AddressRepository addressRepository){
         this.doctorRepository = doctorRepository;
         this.healthCenterRepository = healthCenterRepository;
+        this.addressRepository = addressRepository;
     }
 
     public void createSuperAdminIfNotExists() {
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA2");
         // Check if a SUPER_ADMIN user already exists
         Optional<Doctor> existingSuperAdmin = doctorRepository.findByRole(UserRole.SUPER_ADMIN);
 
@@ -44,11 +47,25 @@ public class DoctorServices {
     }
 
     public Doctor createDoctor(Doctor doctor){
-        HealthCenter healthCenter = doctor.getHealthCenter();
-        System.out.println(healthCenter);
+        HealthCenter healthCenter = healthCenterRepository.findByIdCenter(doctor.getHealthCenter().getId());
         healthCenter.addDoctor(doctor);
         healthCenterRepository.save(healthCenter);
+        doctor.setHealthCenter(healthCenter);
+        Optional<Address> addressOptional = addressRepository.findById(doctor.getAddress().getId());
+        if(addressOptional.isPresent()){
+            Address address = addressOptional.get(); // Retrieve the Address object
+            doctor.setAddress(address);
+        }
         return doctorRepository.save(doctor);
+    }
+
+    public boolean deleteDoctor(Doctor doctor) {
+        try {
+            doctorRepository.delete(doctor);
+            return true; // Deletion successful
+        } catch (Exception e) {
+            return false; // Handle any exceptions, e.g., doctor not found, and indicate failure
+        }
     }
 
     public Doctor getDoctor(Integer doctorId){
