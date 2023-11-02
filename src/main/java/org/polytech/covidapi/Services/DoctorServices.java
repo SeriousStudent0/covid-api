@@ -97,7 +97,7 @@ public class DoctorServices {
             Doctor doctor = optionalDoctor.get();
             
             if (passwordMatches(password, doctor.getPassword()) && doctor.getRole() != UserRole.USER) {
-                doctor.setLog(true);
+                doctor.setIsLogged(true);
                 doctor = doctorRepository.save(doctor);
                 return doctor.getId();
             }
@@ -117,7 +117,7 @@ public class DoctorServices {
         
         if (optionalDoctor.isPresent()) {
             Doctor doctor = optionalDoctor.get();
-            doctor.setLog(false);
+            doctor.setIsLogged(false);
             doctor = doctorRepository.save(doctor);
             return true;
         }

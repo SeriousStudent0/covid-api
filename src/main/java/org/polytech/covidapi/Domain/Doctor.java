@@ -29,6 +29,7 @@ public class Doctor {
     private String password;
 
     @Column(nullable = false)
+    //@JsonProperty("isLogged")
     private Boolean isLogged = false;
 
     @Enumerated(EnumType.STRING)
@@ -77,11 +78,11 @@ public class Doctor {
         this.password = password;
     }
 
-    public Boolean getLog(){
+    public Boolean getIsLogged(){
         return isLogged;
     }
 
-    public void setLog(Boolean logStatus){
+    public void setIsLogged(Boolean logStatus){
         this.isLogged = logStatus;
     }
 
