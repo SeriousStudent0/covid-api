@@ -35,10 +35,10 @@ public class Doctor {
     @Column(name = "role", nullable = false)
     private UserRole role;
 
-    @ManyToOne
-    //@JoinColumn(name = "idCenter")
     //@JsonProperty("healthcenter")
-    //@JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "idCenter")
+    @JsonIgnore
     private HealthCenter healthcenter;
 
     @OneToMany(mappedBy = "doctor")

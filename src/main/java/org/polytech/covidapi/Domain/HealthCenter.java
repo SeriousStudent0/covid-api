@@ -27,10 +27,10 @@ public class HealthCenter {
         nullable = true)
     private Address address;
 
-    @OneToMany(mappedBy = "healthcenter")
     //@OneToMany(mappedBy = "healthcenter", fetch = FetchType.LAZY)
     //@JsonProperty("doctorList")
-    //@JsonIgnore
+    @OneToMany(mappedBy = "healthcenter")
+    @JsonIgnore
     private List<Doctor> doctorList = new ArrayList<>();
 
     public Integer getId() {
