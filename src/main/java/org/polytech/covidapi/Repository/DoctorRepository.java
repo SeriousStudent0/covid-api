@@ -18,4 +18,6 @@ public interface DoctorRepository extends JpaRepository<Doctor, Integer> {
     Optional<Doctor> findByLogin(String login);
 
     Optional<Doctor> findByRole(UserRole role);
+
+    List<Doctor> findAllByRole(UserRole role);
 }

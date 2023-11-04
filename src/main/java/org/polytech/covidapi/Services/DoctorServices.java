@@ -47,10 +47,14 @@ public class DoctorServices {
     }
 
     public Doctor createDoctor(Doctor doctor){
-        HealthCenter healthCenter = healthCenterRepository.findByIdCenter(doctor.getHealthCenter().getId());
-        healthCenter.addDoctor(doctor);
-        healthCenterRepository.save(healthCenter);
-        doctor.setHealthCenter(healthCenter);
+        if(doctor.getRole() != UserRole.SUPER_ADMIN){
+            HealthCenter healthCenter = healthCenterRepository.findByIdCenter(doctor.getHealthCenter().getId());
+            healthCenter.addDoctor(doctor);
+            healthCenterRepository.save(healthCenter);
+            doctor.setHealthCenter(healthCenter);
+        } else{
+            doctor.setHealthCenter(null);
+        }
         Optional<Address> addressOptional = addressRepository.findById(doctor.getAddress().getId());
         if(addressOptional.isPresent()){
             Address address = addressOptional.get(); // Retrieve the Address object
@@ -61,7 +65,7 @@ public class DoctorServices {
 
     public boolean deleteDoctor(Doctor doctor) {
         try {
-            doctorRepository.delete(doctor);
+            doctorRepository.deleteById(doctor.getId());
             return true; // Deletion successful
         } catch (Exception e) {
             return false; // Handle any exceptions, e.g., doctor not found, and indicate failure
@@ -75,13 +79,20 @@ public class DoctorServices {
         return doctor;
     }
 
-    public Doctor updateDoctor(Integer doctorId, Doctor updatedDoctor){
-        Doctor existingDoctor = doctorRepository.findById(doctorId)
+    public Doctor updateDoctor(Doctor updatedDoctor){
+        Doctor existingDoctor = doctorRepository.findById(updatedDoctor.getId())
             .orElseThrow(() -> new EntityNotFoundException("Doctor Not Found"));
+        
+        Address existingAddress = addressRepository.findById(updatedDoctor.getAddress().getId())
+            .orElseThrow(() -> new EntityNotFoundException("Address Not Found"));
 
         existingDoctor.setName(updatedDoctor.getName());
-        existingDoctor.setHealthCenter(updatedDoctor.getHealthCenter());
-        existingDoctor.setAddress(updatedDoctor.getAddress());
+        existingDoctor.setLogin(updatedDoctor.getLogin());
+        existingDoctor.setPassword(updatedDoctor.getPassword());
+        if(updatedDoctor.getRole() != UserRole.SUPER_ADMIN){
+            existingDoctor.setHealthCenter(updatedDoctor.getHealthCenter());
+        }
+        existingDoctor.setAddress(existingAddress);
 
         return doctorRepository.save(existingDoctor);
     }
@@ -90,13 +101,17 @@ public class DoctorServices {
         return doctorRepository.findAllByHealthcenterIdCenter(healtCenterId);
     }
 
+    public List<Doctor> getSuperAdminList(){
+        return doctorRepository.findAllByRole(UserRole.SUPER_ADMIN);
+    }
+
     public Integer authenticate(String login, String password){
         Optional<Doctor> optionalDoctor = doctorRepository.findByLogin(login);
         
         if (optionalDoctor.isPresent()) {
             Doctor doctor = optionalDoctor.get();
             
-            if (passwordMatches(password, doctor.getPassword()) && doctor.getRole() != UserRole.USER) {
+            if (passwordMatches(password, doctor.getPassword())) {
                 doctor.setIsLogged(true);
                 doctor = doctorRepository.save(doctor);
                 return doctor.getId();

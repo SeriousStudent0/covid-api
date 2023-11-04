@@ -42,7 +42,7 @@ public class DoctorController {
 
     @PutMapping(path = "/create")
     public ResponseEntity<Doctor> modifyDoctor(@RequestBody Doctor doctor){
-        Doctor modifiedDoctor = doctorService.updateDoctor(doctor.getId(), doctor);
+        Doctor modifiedDoctor = doctorService.updateDoctor(doctor);
         if (modifiedDoctor != null) {
             return ResponseEntity.status(HttpStatus.OK).body(modifiedDoctor);
         } else {
@@ -90,6 +90,11 @@ public class DoctorController {
         }
     }
 
+    @GetMapping(path = "/superadmins")
+    public ResponseEntity<List<Doctor>> getSuperAdmins(){
+        return ResponseEntity.ok(doctorService.getSuperAdminList());
+    }
+
     @GetMapping()
     public ResponseEntity<Doctor> getUser(@RequestParam(name = "id", required = true) Integer id) {
         Doctor doctor = doctorService.getDoctor(id);
@@ -100,7 +105,7 @@ public class DoctorController {
         }
     }
 
-    @DeleteMapping()
+    @DeleteMapping(path = "/delete")
     public ResponseEntity<Void> deleteDoctor(@RequestBody Doctor doctor) {
         boolean deleted = doctorService.deleteDoctor(doctor);
 

@@ -17,6 +17,7 @@ public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_doctor")
+    @JsonProperty("id")
     private Integer idDoctor;
 
     @Column(nullable = false)
