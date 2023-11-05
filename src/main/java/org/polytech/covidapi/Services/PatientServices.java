@@ -23,4 +23,9 @@ public class PatientServices {
     public List<Patient> getPatientsByDoctorId(Integer doctorId){
         return patientRepository.findAllByDoctorIdDoctor(doctorId);
     } 
+
+    public Patient createPatient(Patient patient){
+        patient.setVaccinated(false);
+        return patientRepository.save(patient);
+    }
 }

@@ -4,6 +4,8 @@ import java.sql.Date;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name="t_rdv")
 public class RendezVous {
@@ -11,17 +13,22 @@ public class RendezVous {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_rendez_vous")
+    @JsonProperty("id")
     private Integer idRDV;
 
     @Column(nullable = false)
     private Date date;
 
     @ManyToOne
-    @JoinColumn(name = "idDoctor")
+    @JoinColumn(
+        name = "idDoctor",
+        nullable = true)
     private Doctor doctor;
 
     @OneToOne
     private Patient patient;
+
+    private boolean validated;
 
 
     public Integer getId(){
@@ -50,6 +57,14 @@ public class RendezVous {
 
     public void setPatient(Patient patient){
         this.patient = patient;
+    }
+
+    public boolean getValidated(){
+        return validated;
+    }
+
+    public void setValidated(boolean status){
+        this.validated = status;
     }
 }
  

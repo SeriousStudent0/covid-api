@@ -2,6 +2,8 @@ package org.polytech.covidapi.Domain;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name="t_patient")
 public class Patient {
@@ -9,26 +11,15 @@ public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_patient")
+    @JsonProperty("id")
     private Integer idPatient;
 
     private String name;
     private boolean vaccinated;
 
-    @OneToOne
-    @JoinColumn(
-        name = "idAddress",
-        foreignKey = @ForeignKey(name = "addressFK"),
-        nullable = true)
-    private Address patientAddress;
-
     @ManyToOne
     @JoinColumn(name = "idDoctor")
     private Doctor doctor;
-
-    @OneToOne(mappedBy = "patient")
-    private RendezVous rdv;
-
-
 
     public Integer getId(){
         return idPatient;
@@ -46,16 +37,8 @@ public class Patient {
         return vaccinated;
     }
 
-    public void setVaccinated(){
-        this.vaccinated = true;
-    }
-
-    public Address getAddress(){
-        return patientAddress;
-    }
-
-    public void setAddress(Address address){
-        this.patientAddress = address;
+    public void setVaccinated(boolean status){
+        this.vaccinated = status;
     }
 
     public Doctor getDoctor(){
@@ -64,14 +47,6 @@ public class Patient {
 
     public void setDoctor(Doctor doctor){
         this.doctor = doctor;
-    }
-
-    public RendezVous getRDV(){
-        return rdv;
-    }
-
-    public void setRDV(RendezVous rdv){
-        this.rdv = rdv;
     }
 }
 
