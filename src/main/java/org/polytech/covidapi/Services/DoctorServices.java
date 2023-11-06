@@ -7,6 +7,8 @@ import java.util.Optional;
 import javax.persistence.EntityNotFoundException;
 import javax.print.Doc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.polytech.covidapi.Domain.Address;
 import org.polytech.covidapi.Domain.Doctor;
 import org.polytech.covidapi.Domain.HealthCenter;
@@ -15,11 +17,16 @@ import org.polytech.covidapi.Repository.DoctorRepository;
 import org.polytech.covidapi.Repository.HealthCenterRepository;
 import org.polytech.covidapi.enums.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DoctorServices {
-
+public class DoctorServices implements UserDetailsService{
+    private static Logger log = LoggerFactory.getLogger(DoctorServices.class);
     private final DoctorRepository doctorRepository;
     private final HealthCenterRepository healthCenterRepository;
     private final AddressRepository addressRepository;
@@ -46,6 +53,22 @@ public class DoctorServices {
         }
     }
 
+    @Override
+    public UserDetails loadUserByUsername(final String login)
+            throws UsernameNotFoundException {
+        log.info("gathering of {}", login);
+
+        Optional<Doctor> optionalUser = doctorRepository.findByLogin(login);
+        if (optionalUser.isPresent()) {
+            Doctor user = optionalUser.get();
+            return new User(user.getLogin(), user.getPassword(), List.of());
+        } else {
+            throw new UsernameNotFoundException("The user : " + login + " does not exist");
+        }
+
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
     public Doctor createDoctor(Doctor doctor){
         if(doctor.getRole() != UserRole.SUPER_ADMIN){
             HealthCenter healthCenter = healthCenterRepository.findByIdCenter(doctor.getHealthCenter().getId());
@@ -63,6 +86,7 @@ public class DoctorServices {
         return doctorRepository.save(doctor);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public boolean deleteDoctor(Doctor doctor) {
         try {
             doctorRepository.deleteById(doctor.getId());
@@ -72,6 +96,7 @@ public class DoctorServices {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public Doctor getDoctor(Integer doctorId){
         Doctor doctor = doctorRepository.findById(doctorId)
             .orElseThrow(() -> new EntityNotFoundException("Doctor Not Found"));
@@ -79,6 +104,7 @@ public class DoctorServices {
         return doctor;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public Doctor updateDoctor(Doctor updatedDoctor){
         Doctor existingDoctor = doctorRepository.findById(updatedDoctor.getId())
             .orElseThrow(() -> new EntityNotFoundException("Doctor Not Found"));
@@ -97,10 +123,12 @@ public class DoctorServices {
         return doctorRepository.save(existingDoctor);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public List<Doctor> getDoctorsByHealthCenterId(Integer healtCenterId){
         return doctorRepository.findAllByHealthcenterIdCenter(healtCenterId);
     }
 
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     public List<Doctor> getSuperAdminList(){
         return doctorRepository.findAllByRole(UserRole.SUPER_ADMIN);
     }
@@ -127,6 +155,7 @@ public class DoctorServices {
         return rawPassword.equals(hashedPassword);
     }
 
+    @PreAuthorize("hasRole('USER')")
     public boolean loggout(Integer id){
         Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
         

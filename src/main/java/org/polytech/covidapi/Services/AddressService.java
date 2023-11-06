@@ -7,6 +7,7 @@ import javax.persistence.EntityNotFoundException;
 import org.polytech.covidapi.Domain.Address;
 import org.polytech.covidapi.Repository.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,10 +19,12 @@ public class AddressService {
         this.addressRepository = addressRepository;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public Address createAddress(Address address){
         return addressRepository.save(address);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public Address updateAddress(Integer addressId, Address updatedAddress){
         Address existingAddress = addressRepository.findById(addressId)
             .orElseThrow(() -> new EntityNotFoundException("Address Not Found"));

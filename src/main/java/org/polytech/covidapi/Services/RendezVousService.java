@@ -13,6 +13,7 @@ public class RendezVousService {
     public RendezVousService(RendezVousRepository rendezVousRepository){
         this.rendezVousRepository = rendezVousRepository;
     }
+    
     public RendezVous createRDV(RendezVous rdv){
         return rendezVousRepository.save(rdv);
     }

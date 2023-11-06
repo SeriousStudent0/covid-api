@@ -9,6 +9,7 @@ import org.polytech.covidapi.Domain.HealthCenter;
 import org.polytech.covidapi.Repository.AddressRepository;
 import org.polytech.covidapi.Repository.HealthCenterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,11 +23,13 @@ public class HealthCenterServices {
         this.healthCenterRepository = healthCenterRepository;
     }
 
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     public HealthCenter createHealthCenter(HealthCenter healthCenter){
         
         return healthCenterRepository.save(healthCenter);
     }
 
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     public HealthCenter updateHealthCenter(HealthCenter healthCenter){
         HealthCenter existingCenter = healthCenterRepository.findById(healthCenter.getId())
             .orElseThrow(() -> new EntityNotFoundException("HealthCenter Not Found"));
@@ -41,6 +44,7 @@ public class HealthCenterServices {
         return healthCenterRepository.findAll();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public List<Doctor> getCenterDoctorList(Integer id){
         HealthCenter healthCenter = healthCenterRepository.findByIdCenter(id);
         return healthCenter.getDoctorList();

@@ -34,13 +34,13 @@ public class DoctorController {
         this.patientService = patientService;
     }
 
-    @PostMapping(path = "/create")
+    @PostMapping(path = "private/create")
     public ResponseEntity<Doctor> createDoctor(@RequestBody Doctor doctor){
         Doctor createdDoctor = doctorService.createDoctor(doctor);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdDoctor);
     }
 
-    @PutMapping(path = "/create")
+    @PutMapping(path = "private/create")
     public ResponseEntity<Doctor> modifyDoctor(@RequestBody Doctor doctor){
         Doctor modifiedDoctor = doctorService.updateDoctor(doctor);
         if (modifiedDoctor != null) {
@@ -50,19 +50,19 @@ public class DoctorController {
         }
     }
 
-    @GetMapping(path = "/{doctorId}/patients")
+    @GetMapping(path = "private/{doctorId}/patients")
     public ResponseEntity<List<Patient>> getPatientsForDoctorId(@PathVariable Integer doctorId){
         List<Patient> patients = patientService.getPatientsByDoctorId(doctorId);
         return ResponseEntity.ok(patients);
     }
 
-    @GetMapping(path = "/{doctorId}/patients/search")
+    @GetMapping(path = "private/{doctorId}/patients/search")
     public List<Patient> getAllPatientByName(
         @RequestParam(name = "name", required = true) String name){
             return patientService.getAllPatientByName(name);
     }
 
-    @PostMapping(path = "/logging")
+    @PostMapping(path = "public/logging")
     public ResponseEntity<Integer> logAs(@RequestBody LoginRequest loginRequest){
 
         String login = loginRequest.getLogin();
@@ -77,7 +77,7 @@ public class DoctorController {
         }
     }
 
-    @PutMapping(path = "/logging")
+    @PutMapping(path = "private/logging")
     public ResponseEntity<Boolean> loggout(@RequestBody Integer userId) {
         boolean logResult = doctorService.loggout(userId);
         
@@ -90,12 +90,12 @@ public class DoctorController {
         }
     }
 
-    @GetMapping(path = "/superadmins")
+    @GetMapping(path = "private/superadmins")
     public ResponseEntity<List<Doctor>> getSuperAdmins(){
         return ResponseEntity.ok(doctorService.getSuperAdminList());
     }
 
-    @GetMapping()
+    @GetMapping(path = "private")
     public ResponseEntity<Doctor> getUser(@RequestParam(name = "id", required = true) Integer id) {
         Doctor doctor = doctorService.getDoctor(id);
         if (doctor != null) {
@@ -105,7 +105,7 @@ public class DoctorController {
         }
     }
 
-    @DeleteMapping(path = "/delete")
+    @DeleteMapping(path = "private/delete")
     public ResponseEntity<Void> deleteDoctor(@RequestBody Doctor doctor) {
         boolean deleted = doctorService.deleteDoctor(doctor);
 

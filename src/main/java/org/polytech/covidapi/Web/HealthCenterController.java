@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin
-@RequestMapping("public/healthcenter")
+@RequestMapping("/healthcenter")
 public class HealthCenterController {
     private final HealthCenterServices healthcenterService;
     private final AddressService addressService;
@@ -37,7 +37,7 @@ public class HealthCenterController {
         this.addressService = addressService;
     }
     
-    @PostMapping(path = "/create")
+    @PostMapping(path = "private/create")
     public ResponseEntity<HealthCenter> createHealthCenter(@RequestBody HealthCenter healthCenter){
 
         if (healthCenter.getName() == null || healthCenter.getAddress().getId() == null) {
@@ -58,7 +58,7 @@ public class HealthCenterController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdHealthCenter);
     }
 
-    @PutMapping(path = "/create")
+    @PutMapping(path = "private/create")
     public ResponseEntity<HealthCenter> updateHealthCenter(@RequestBody HealthCenter healthCenter){
 
         if (healthCenter == null) {
@@ -74,12 +74,12 @@ public class HealthCenterController {
         }
     }
 
-    @GetMapping
+    @GetMapping(path = "public")
     public List<HealthCenter> getAllHealthCenterList(){
         return healthcenterService.getAll();
     }
 
-    @GetMapping(path = "/{id}/doctors")
+    @GetMapping(path = "private/{id}/doctors")
     public ResponseEntity<List<Doctor>> getCenterDoctorList(@PathVariable Integer id){
         List<Doctor> doctors = healthcenterService.getCenterDoctorList(id);
         return ResponseEntity.ok(doctors);

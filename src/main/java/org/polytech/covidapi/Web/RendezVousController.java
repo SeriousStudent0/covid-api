@@ -25,7 +25,7 @@ public class RendezVousController {
         this.rendezVousService = rendezVousService;
     }
     
-    @PostMapping(path = "/create")
+    @PostMapping(path = "public/create")
     public ResponseEntity<RendezVous> createRDV(@RequestBody RendezVous rdv){
         rdv.setValidated(false);
         RendezVous createdRDV= rendezVousService.createRDV(rdv);

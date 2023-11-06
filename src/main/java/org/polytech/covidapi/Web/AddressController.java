@@ -26,13 +26,13 @@ public class AddressController {
         this.addressService = addressService;
     }
 
-    @PostMapping(path = "/create")
+    @PostMapping(path = "private/create")
     public ResponseEntity<Address> createAddress(@RequestBody Address address){
         Address createdAddress = addressService.createAddress(address);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdAddress);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("private/{id}")
     public ResponseEntity<Address> updateAddress(
             @PathVariable Integer id,
             @RequestBody Address updatedAddress) {

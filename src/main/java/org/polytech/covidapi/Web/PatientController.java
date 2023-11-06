@@ -28,12 +28,12 @@ public class PatientController {
         this.patientService = patientService;
     }
 
-    @GetMapping(path = "/{doctorId}/patients")
+    @GetMapping(path = "private/{doctorId}/patients")
     public List<Patient> getAllPatientForDoctorList(@PathVariable Integer doctorId){
         return patientService.getPatientsByDoctorId(doctorId);
     }
 
-    @PostMapping(path = "/create")
+    @PostMapping(path = "private/create")
     public ResponseEntity<Patient> createPatient(@RequestBody Patient patient){
         Patient createdPatient = patientService.createPatient(patient);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdPatient);
