@@ -45,9 +45,14 @@ public class SecurityConfig {
         }
 
     @Bean
-    AccessDecisionVoter hierarchyVoter(){
+    public AccessDecisionVoter hierarchyVoter(){
         RoleHierarchyImpl hierarchy=new RoleHierarchyImpl();
         hierarchy.setHierarchy("SUPER_ADMIN > ADMIN > USER");
         return new RoleHierarchyVoter(hierarchy);
-        }
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(); // Use an appropriate password encoder (e.g., BCrypt)
+    }
 }

@@ -22,6 +22,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,6 +31,9 @@ public class DoctorServices implements UserDetailsService{
     private final DoctorRepository doctorRepository;
     private final HealthCenterRepository healthCenterRepository;
     private final AddressRepository addressRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder; // Inject the PasswordEncoder
 
     @Autowired
     public DoctorServices(DoctorRepository doctorRepository, HealthCenterRepository healthCenterRepository, AddressRepository addressRepository){
@@ -47,7 +51,8 @@ public class DoctorServices implements UserDetailsService{
             Doctor superAdmin = new Doctor();
             superAdmin.setName("administrator");
             superAdmin.setLogin("admin");
-            superAdmin.setPassword("password"); // should be securely hashed
+            String encodedPassword = passwordEncoder.encode("password");
+            superAdmin.setPassword(encodedPassword); //securely hashed
             superAdmin.setRole(UserRole.SUPER_ADMIN);
             doctorRepository.save(superAdmin);
         }
@@ -70,6 +75,8 @@ public class DoctorServices implements UserDetailsService{
 
     @PreAuthorize("hasRole('ADMIN')")
     public Doctor createDoctor(Doctor doctor){
+        String encodedPassword = passwordEncoder.encode(doctor.getPassword());
+        doctor.setPassword(encodedPassword);
         if(doctor.getRole() != UserRole.SUPER_ADMIN){
             HealthCenter healthCenter = healthCenterRepository.findByIdCenter(doctor.getHealthCenter().getId());
             healthCenter.addDoctor(doctor);
@@ -135,10 +142,9 @@ public class DoctorServices implements UserDetailsService{
 
     public Integer authenticate(String login, String password){
         Optional<Doctor> optionalDoctor = doctorRepository.findByLogin(login);
-        
         if (optionalDoctor.isPresent()) {
             Doctor doctor = optionalDoctor.get();
-            
+            System.out.println(doctor.getPassword());
             if (passwordMatches(password, doctor.getPassword())) {
                 doctor.setIsLogged(true);
                 doctor = doctorRepository.save(doctor);
@@ -150,9 +156,8 @@ public class DoctorServices implements UserDetailsService{
     }
 
     private boolean passwordMatches(String rawPassword, String hashedPassword) {
-        // Password hashing logic here
-        // hashing library (BCrypt)
-        return rawPassword.equals(hashedPassword);
+       // Use BCryptPasswordEncoder's matches method to verify the password
+        return passwordEncoder.matches(rawPassword, hashedPassword);
     }
 
     @PreAuthorize("hasRole('USER')")
