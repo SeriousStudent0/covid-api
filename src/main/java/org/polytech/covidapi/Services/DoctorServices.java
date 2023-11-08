@@ -12,9 +12,11 @@ import org.slf4j.LoggerFactory;
 import org.polytech.covidapi.Domain.Address;
 import org.polytech.covidapi.Domain.Doctor;
 import org.polytech.covidapi.Domain.HealthCenter;
+import org.polytech.covidapi.Domain.RendezVous;
 import org.polytech.covidapi.Repository.AddressRepository;
 import org.polytech.covidapi.Repository.DoctorRepository;
 import org.polytech.covidapi.Repository.HealthCenterRepository;
+import org.polytech.covidapi.Repository.RendezVousRepository;
 import org.polytech.covidapi.enums.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,15 +33,17 @@ public class DoctorServices implements UserDetailsService{
     private final DoctorRepository doctorRepository;
     private final HealthCenterRepository healthCenterRepository;
     private final AddressRepository addressRepository;
+    private final RendezVousRepository rendezVousRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder; // Inject the PasswordEncoder
 
     @Autowired
-    public DoctorServices(DoctorRepository doctorRepository, HealthCenterRepository healthCenterRepository, AddressRepository addressRepository){
+    public DoctorServices(DoctorRepository doctorRepository, HealthCenterRepository healthCenterRepository, AddressRepository addressRepository, RendezVousRepository rendezVousRepository){
         this.doctorRepository = doctorRepository;
         this.healthCenterRepository = healthCenterRepository;
         this.addressRepository = addressRepository;
+        this.rendezVousRepository = rendezVousRepository;
     }
 
     public void createSuperAdminIfNotExists() {
@@ -171,5 +175,16 @@ public class DoctorServices implements UserDetailsService{
             return true;
         }
         return false;
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    public Doctor addRDV(Integer userId, Integer rdvId){
+        Doctor pointedDoctor = doctorRepository.findById(userId)
+            .orElseThrow(() -> new EntityNotFoundException("Doctor Not Found"));
+        RendezVous pointedRDV = rendezVousRepository.findById(rdvId)
+            .orElseThrow(() -> new EntityNotFoundException("Rendez-Vous Not Found"));
+        
+        pointedDoctor.addRDV(pointedRDV);
+        return doctorRepository.save(pointedDoctor);
     }
 }

@@ -3,8 +3,11 @@ package org.polytech.covidapi.Web;
 import java.util.Base64;
 import java.util.List;
 
+import java.util.Map;
+
 import org.polytech.covidapi.Domain.Doctor;
 import org.polytech.covidapi.Domain.Patient;
+import org.polytech.covidapi.Domain.RendezVous;
 import org.polytech.covidapi.Services.DoctorServices;
 import org.polytech.covidapi.Services.PatientServices;
 import org.polytech.covidapi.dto.LoginRequest;
@@ -133,5 +136,14 @@ public class DoctorController {
             // Handle the case where the doctor wasn't found or couldn't be deleted
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @PostMapping(path = "private/addRDV")
+    public ResponseEntity<Doctor> addRDVToRDVList(@RequestBody Map<String, Object> requestBody) {
+        Integer userId = (Integer) requestBody.get("doctorId");
+        Integer rdvId = (Integer) requestBody.get("rdvId");
+
+        Doctor updatedDoctor = doctorService.addRDV(userId, rdvId);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedDoctor);
     }
 }

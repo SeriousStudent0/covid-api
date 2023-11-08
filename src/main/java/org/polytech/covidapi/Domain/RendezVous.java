@@ -4,6 +4,7 @@ import java.sql.Date;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
@@ -16,13 +17,14 @@ public class RendezVous {
     @JsonProperty("id")
     private Integer idRDV;
 
-    @Column(nullable = false)
+    //@Column(nullable = false)
     private Date date;
 
     @ManyToOne
     @JoinColumn(
         name = "idDoctor",
         nullable = true)
+    @JsonIgnore
     private Doctor doctor;
 
     @OneToOne

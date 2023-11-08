@@ -12,6 +12,6 @@ public interface RendezVousRepository extends JpaRepository<RendezVous, Integer>
     
     Optional<RendezVous> findById(Integer idRDV);
     
-    List<RendezVous> findAll();
+    List<RendezVous> findByValidatedFalse();;
     
 }
