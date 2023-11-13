@@ -63,6 +63,11 @@ public class Doctor {
         return idDoctor;
     }
 
+    //used in tests only
+    public void setId(Integer id){
+        this.idDoctor = id;
+    }
+
     public String getLogin(){
         return login;
     }

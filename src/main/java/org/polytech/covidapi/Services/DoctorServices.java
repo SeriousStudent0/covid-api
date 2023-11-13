@@ -39,11 +39,12 @@ public class DoctorServices implements UserDetailsService{
     private PasswordEncoder passwordEncoder; // Inject the PasswordEncoder
 
     @Autowired
-    public DoctorServices(DoctorRepository doctorRepository, HealthCenterRepository healthCenterRepository, AddressRepository addressRepository, RendezVousRepository rendezVousRepository){
+    public DoctorServices(DoctorRepository doctorRepository, HealthCenterRepository healthCenterRepository, AddressRepository addressRepository, RendezVousRepository rendezVousRepository, PasswordEncoder passwordEncoder){
         this.doctorRepository = doctorRepository;
         this.healthCenterRepository = healthCenterRepository;
         this.addressRepository = addressRepository;
         this.rendezVousRepository = rendezVousRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public void createSuperAdminIfNotExists() {
@@ -148,7 +149,7 @@ public class DoctorServices implements UserDetailsService{
         Optional<Doctor> optionalDoctor = doctorRepository.findByLogin(login);
         if (optionalDoctor.isPresent()) {
             Doctor doctor = optionalDoctor.get();
-            System.out.println(doctor.getPassword());
+            System.out.println("Doctor Found");
             if (passwordMatches(password, doctor.getPassword())) {
                 doctor.setIsLogged(true);
                 doctor = doctorRepository.save(doctor);
