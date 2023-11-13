@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Integer> {
     
-    List<Patient> findByDoctorIdDoctor(Integer doctorId);
-    List<Patient> findByNameContaining(String name);
+    List<Patient> findAllByDoctorIdDoctor(Integer doctorId);
+    List<Patient> findAllByNameContaining(String name);
 }

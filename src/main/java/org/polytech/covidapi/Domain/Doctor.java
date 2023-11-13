@@ -1,8 +1,14 @@
 package org.polytech.covidapi.Domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
+
+import org.polytech.covidapi.enums.UserRole;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name="t_doctor")
@@ -10,17 +16,36 @@ public class Doctor {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_doctor")
+    @JsonProperty("id")
     private Integer idDoctor;
 
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    private String login;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
+    //@JsonProperty("isLogged")
+    private Boolean isLogged = false;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private UserRole role;
+
+    //@JsonProperty("healthcenter")
     @ManyToOne
     @JoinColumn(name = "idCenter")
+    @JsonIgnore
     private HealthCenter healthcenter;
 
-    @OneToMany(mappedBy = "idDoctor")
-    private List<Patient> patients;
+    @OneToMany(mappedBy = "doctor")
+    @JsonIgnore
+    private List<Patient> patients = new ArrayList<>();
 
     @OneToOne
     @JoinColumn(
@@ -30,11 +55,36 @@ public class Doctor {
     private Address doctorAddress;
 
     @OneToMany(mappedBy = "doctor")
-    private List<RendezVous> rdv;
+    @JsonIgnore
+    private List<RendezVous> rdv = new ArrayList<>();
 
 
     public Integer getId(){
         return idDoctor;
+    }
+
+    public String getLogin(){
+        return login;
+    }
+
+    public void setLogin(String login){
+        this.login = login;
+    }
+
+    public String getPassword(){
+        return password;
+    }
+
+    public void setPassword(String password){
+        this.password = password;
+    }
+
+    public Boolean getIsLogged(){
+        return isLogged;
+    }
+
+    public void setIsLogged(Boolean logStatus){
+        this.isLogged = logStatus;
     }
 
     public String getName(){
@@ -43,6 +93,14 @@ public class Doctor {
 
     public void setName(String name){
         this.name = name;
+    }
+
+    public UserRole getRole(){
+        return role;
+    }
+
+    public void setRole(UserRole role){
+        this.role = role;
     }
 
     public Address getAddress(){
