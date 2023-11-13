@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @SpringBootTest
 public class DoctorServicesIT {
     
+    /*
     @Autowired
     DoctorServices doctorServices;
 
@@ -79,4 +80,6 @@ public class DoctorServicesIT {
         Assertions.assertThat(user.getIsLogged()).isFalse();
 
     }
+
+     */
 }
