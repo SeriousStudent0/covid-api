@@ -4,8 +4,9 @@ pipeline {
     environment {
         DOCKER_IMAGE_NAME = 'covid-api'
         DOCKER_REGISTRY_TAG = 'jet00000/covid-api:0.0.8'
-        DOCKERHUB_USERNAME = credentials('docker-hub-credentials-id') ?: ''
-        DOCKERHUB_PASSWORD = credentials('docker-hub-credentials-id-password') ?: ''
+        DOCKERHUB_USERNAME = credentials("docker-hub-credentials-id") ?: ''
+        DOCKERHUB_PASSWORD = credentials("docker-hub-credentials-id-password") ?: ''
+
 
     }
 
