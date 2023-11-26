@@ -20,17 +20,13 @@ pipeline {
             }
         }
 
-        withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials-id', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
-            stage('Push Docker Image') {
-                steps {
-                    script {
-                        // Login to Docker Hub
-                        sh "docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}"
-                        
-                        // Push Docker image to registry
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    // Push Docker image to registry
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials-id', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                        sh 'docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD'
                         sh 'docker push jet00000/covid-api:0.0.8'
-                        
-                        // Logout from Docker Hub
                         sh 'docker logout'
                     }
                 }
