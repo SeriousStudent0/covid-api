@@ -17,3 +17,7 @@ JENKINS
     password : admin
     full name : admin admin
     email : email@email.com
+
+-suggested addons
+
+-docker creds id for indentified push : docker-hub-credentials-id

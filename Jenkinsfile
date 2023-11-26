@@ -4,6 +4,9 @@ pipeline {
     environment {
         DOCKER_IMAGE_NAME = 'covid-api'
         DOCKER_REGISTRY_TAG = 'jet00000/covid-api:0.0.8'
+        DOCKERHUB_USERNAME = credentials('docker-hub-credentials-id') ?: ''
+        DOCKERHUB_PASSWORD = credentials('docker-hub-credentials-id-password') ?: ''
+
     }
 
     stages {
@@ -28,8 +31,14 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
+                    // Login to Docker Hub
+                    sh "docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}"
+                    
                     // Push Docker image to registry
                     sh "docker push ${DOCKER_REGISTRY_TAG}"
+                    
+                    // Logout from Docker Hub
+                    sh "docker logout"
                 }
             }
         }
