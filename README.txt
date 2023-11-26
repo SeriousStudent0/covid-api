@@ -10,5 +10,10 @@ __________________________________________
 -tagging the image
  image tag : 
 
-
 ___________________________________________
+JENKINS
+-admin user :
+    name : administrator
+    password : admin
+    full name : admin admin
+    email : email@email.com
