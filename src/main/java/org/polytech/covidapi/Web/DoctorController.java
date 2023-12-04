@@ -70,10 +70,8 @@ public class DoctorController {
 
     @PostMapping(path = "public/logging")
     public ResponseEntity<Integer> logAs(@RequestHeader HttpHeaders headers) {
-        System.out.println("debug");
         // Extract the Authorization header
         String authHeader = headers.getFirst(HttpHeaders.AUTHORIZATION);
-        System.out.println(authHeader);
 
         if (authHeader != null && authHeader.startsWith("Digest base64(")) {
             // Extract the base64 credentials from the Authorization header
@@ -83,9 +81,6 @@ public class DoctorController {
             String[] credentials = decodedCredentials.split(":", 2);
             String login = credentials[0];
             String password = credentials[1];
-
-            System.out.println(login);
-            System.out.println(password);
 
             Integer userId = doctorService.authenticate(login, password);
 

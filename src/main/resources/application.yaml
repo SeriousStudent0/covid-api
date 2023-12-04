@@ -9,3 +9,26 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
     hibernate.ddl-auto: create
+  metrics:
+    export:
+      influx:
+        uri: http://localhost:19086
+        bucket: bitcoin
+        enabled: true
+        api-version: v2
+        org: ruokki
+        step: 5s
+        token: zsOhTZbBAq4K7t5OjagVrJgvNe4rSRe4NXiHE0A__HUDTYmrdjYF0PP2cGSqGNeSUJf8Dmj3z4Jo89wyWyPgfg==
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: health,info,metrics,prometheus
+      prometheus:
+        enabled: true
+        scrape_configs:
+          - job_name: 'spring-boot'
+            metrics_path: '/actuator/prometheus'
+            static_configs:
+              - targets: ['localhost:8080']
+
