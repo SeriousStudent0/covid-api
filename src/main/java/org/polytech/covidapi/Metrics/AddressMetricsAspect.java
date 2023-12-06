@@ -45,7 +45,6 @@ public class AddressMetricsAspect {
     public Object duration(ProceedingJoinPoint joinPoint)
             throws Throwable {
         String tag = joinPoint.getSignature().getName();
-        //Timer timer = registry.timer(tag + "_exec_time", "path", tag);
         Timer timer = Timer.builder(tag + "_exec_time").tag("path", tag).register(registry);
         Instant startTime = Instant.now();
         try {
@@ -54,4 +53,6 @@ public class AddressMetricsAspect {
             timer.record(Duration.between(startTime, Instant.now()));
         }   
     }
+
+    // Accessible at http://localhost:8080/actuator/metrics/    e.g : createAddress_exec_success_count
 }
