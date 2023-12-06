@@ -25,7 +25,7 @@ management:
             - targets: ['localhost:8080']
 
 server:
-  port: 12037
+  port: 8080
 logging:
   level:
     io:

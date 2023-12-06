@@ -1,9 +1,11 @@
 package org.polytech.covidapi.Metrics;
 
-import io.prometheus.client.Counter;
-import io.prometheus.client.Histogram;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -17,46 +19,38 @@ import java.time.Instant;
 @Aspect
 public class AddressMetricsAspect {
 
-    private final Counter counterCall;
-    private final Counter counterFail;
-    private final Histogram timer;
-    private final Counter createAddressCounter;
-    private final Histogram updateAddressDuration;
+    private final MeterRegistry registry;
 
     @Autowired
-    public AddressMetricsAspect(
-            Counter counterCall, Counter counterFail, Histogram timer,
-            Counter createAddressCounter, Histogram updateAddressDuration
-    ) {
-        this.counterCall = counterCall;
-        this.counterFail = counterFail;
-        this.timer = timer;
-        this.createAddressCounter = createAddressCounter;
-        this.updateAddressDuration = updateAddressDuration;
+    public AddressMetricsAspect(MeterRegistry registry) {
+        this.registry = registry;
     }
 
+    // Success counter of the executed method among all from AddressService
+    @AfterReturning("execution(public * org.polytech.covidapi.Services.AddressService.*(..))")
+    public void successExecCount(JoinPoint joinPoint) {
+        String tag = joinPoint.getSignature().getName();
+        registry.counter(tag + "_exec_success_count", tag).increment();
+    }
+
+    // Fail counter of the executed method among all from AddressService
     @AfterThrowing("execution(public * org.polytech.covidapi.Services.AddressService.*(..))")
-    public void afterThrowingAddressService(JoinPoint joinPoint) {
-        counterFail.inc();
+    public void failExecCount(JoinPoint joinPoint) {
+        String tag = joinPoint.getSignature().getName();
+        registry.counter(tag + "_exec_fail_count", tag).increment();
     }
 
-    @Around("execution(public * org.polytech.covidapi.Services.AddressService.createAddress(..))")
-    public Object aroundCreateAddress(ProceedingJoinPoint joinPoint) throws Throwable {
-        createAddressCounter.inc();
-        return measureDuration(joinPoint, timer);
-    }
-
-    @Around("execution(public * org.polytech.covidapi.Services.AddressService.updateAddress(..))")
-    public Object aroundUpdateAddress(ProceedingJoinPoint joinPoint) throws Throwable {
-        return measureDuration(joinPoint, updateAddressDuration);
-    }
-
-    private Object measureDuration(ProceedingJoinPoint joinPoint, Histogram histogram) throws Throwable {
-        Histogram.Timer timer = histogram.startTimer();
+    // Execution duration of the executed method among all from AddressService
+    @Around("execution(public * org.polytech.covidapi.Services.AddressService.*(..))")
+    public Object duration(ProceedingJoinPoint joinPoint)
+            throws Throwable {
+        String tag = joinPoint.getSignature().getName();
+        Timer timer = registry.timer(tag + "_exec_time", tag);
+        Instant startTime = Instant.now();
         try {
             return joinPoint.proceed(joinPoint.getArgs());
         } finally {
-            timer.observeDuration();
-        }
+            timer.record(Duration.between(startTime, Instant.now()));
+        }   
     }
 }
