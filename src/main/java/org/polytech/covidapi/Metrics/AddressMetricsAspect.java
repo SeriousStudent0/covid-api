@@ -54,5 +54,5 @@ public class AddressMetricsAspect {
         }   
     }
 
-    // Accessible at http://localhost:8080/actuator/metrics/    e.g : createAddress_exec_success_count
+    // Accessible at http://localhost:8080/actuator/metrics    e.g : /createAddress_exec_success_count
 }
