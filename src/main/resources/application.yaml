@@ -13,16 +13,12 @@ spring:
 
 management:
   endpoints:
+    jmx:
+      exposure:
+        include: info,health,beans,metrics,endpoints,mappings
     web:
       exposure:
-        include: health,info,metrics,prometheus
-    prometheus:
-      enabled: true
-      scrape_configs:
-        - job_name: 'spring-boot'
-          metrics_path: '/actuator/prometheus'
-          static_configs:
-            - targets: ['localhost:8080']
+        include: health,info,prometheus,metrics
 
 server:
   port: 8080

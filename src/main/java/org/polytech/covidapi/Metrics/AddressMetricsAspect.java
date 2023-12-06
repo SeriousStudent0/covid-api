@@ -30,16 +30,17 @@ public class AddressMetricsAspect {
     @AfterReturning("execution(public * org.polytech.covidapi.Services.AddressService.*(..))")
     public void successExecCount(JoinPoint joinPoint) {
         String tag = joinPoint.getSignature().getName();
-        registry.counter(tag + "_exec_success_count", tag).increment();
+        registry.counter(tag + "_exec_success_count", "path", tag).increment();
     }
 
     // Fail counter of the executed method among all from AddressService
     @AfterThrowing("execution(public * org.polytech.covidapi.Services.AddressService.*(..))")
     public void failExecCount(JoinPoint joinPoint) {
         String tag = joinPoint.getSignature().getName();
-        registry.counter(tag + "_exec_fail_count", tag).increment();
+        registry.counter(tag + "_exec_fail_count", "path", tag).increment();
     }
 
+    /*
     // Execution duration of the executed method among all from AddressService
     @Around("execution(public * org.polytech.covidapi.Services.AddressService.*(..))")
     public Object duration(ProceedingJoinPoint joinPoint)
@@ -53,4 +54,6 @@ public class AddressMetricsAspect {
             timer.record(Duration.between(startTime, Instant.now()));
         }   
     }
+    */
+    
 }
